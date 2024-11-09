@@ -4,7 +4,7 @@
 
 <template>
   <div class="container mt-5">
-    <h1 class="mb-4">Blogové články</h1>
+    <h1 class="mb-4">Blogové články su dnes tototop</h1>
     <div class="row">
       <div class="col-md-4" v-for="article in articles" :key="article.id">
         <ArticleCard :article="article" />
