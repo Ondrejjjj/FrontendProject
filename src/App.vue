@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import Navbar from './components/Navbar.vue';  // Import navbar komponentu
+import Navbar from './components/Navbar.vue';
 import { RouterView } from 'vue-router';
+import { ref } from 'vue';
+
+const isDarkMode = ref(false);
+
+function toggleTheme() {
+  isDarkMode.value = !isDarkMode.value;
+}
 </script>
 
 <template>
-  <div>
-    <!-- Umiesťujeme Navbar do hlavičky -->
+  <div :class="{ 'dark-mode': isDarkMode }">
     <header>
-      <Navbar /> <!-- Použitie Navbar komponentu -->
+      <Navbar :isDarkMode="isDarkMode" @toggle-theme="toggleTheme" /> <!-- Pass isDarkMode and toggle -->
     </header>
-
-    <!-- Content Area -->
     <main class="content">
-      <RouterView /> <!-- Tu bude zobrazovať obsah jednotlivých stránok -->
+      <RouterView :isDarkMode="isDarkMode" /> <!-- Pass isDarkMode to RouterView for articles -->
     </main>
   </div>
 </template>
 
 <style scoped>
-/* Content area adjusts margin to avoid overlap with navbar */
 .content {
-  margin-top: 80px; /* Adjust this value based on navbar height */
+  margin-top: 80px;
+}
+
+/* Apply dark-mode styles globally */
+.dark-mode {
+  background-color: #333;
+  color: #eee;
 }
 </style>

@@ -1,27 +1,27 @@
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
-export default defineComponent({
-  name: "Navbar",
-  setup() {
-    // Stav pre Light/Dark mode
-    const isDarkMode = ref(false);
+// Dark mode and login state
+const isDarkMode = ref(false);
+const isLoggedIn = ref(false);
 
-    // Funkcia na prepínanie medzi svetlým a tmavým režimom
-    const toggleTheme = () => {
-      isDarkMode.value = !isDarkMode.value;
-      if (isDarkMode.value) {
-        document.body.classList.add('bg-dark', 'text-light');
-        document.body.classList.remove('bg-light', 'text-dark');
-      } else {
-        document.body.classList.add('bg-light', 'text-dark');
-        document.body.classList.remove('bg-dark', 'text-light');
-      }
-    };
-
-    return { isDarkMode, toggleTheme };
+// Toggle theme function
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value;
+  if (isDarkMode.value) {
+    document.body.classList.add('bg-dark', 'text-light');
+    document.body.classList.remove('bg-light', 'text-dark');
+  } else {
+    document.body.classList.add('bg-light', 'text-dark');
+    document.body.classList.remove('bg-dark', 'text-light');
   }
-});
+};
+
+// Logout function (extend with actual logic if needed)
+const logout = () => {
+  isLoggedIn.value = false;
+};
 </script>
 
 <template>
@@ -45,11 +45,16 @@ export default defineComponent({
 
       <!-- Right aligned items -->
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" v-if="!isDarkMode">
-          <button class="btn btn-outline-dark" @click="toggleTheme">Switch to Dark Mode</button>
-        </li>
-        <li class="nav-item" v-if="isDarkMode">
-          <button class="btn btn-outline-light" @click="toggleTheme">Switch to Light Mode</button>
+        <li class="nav-item">
+          <button
+              class="btn"
+              :class="[
+              isDarkMode ? 'btn-light text-dark custom-dark-btn' : 'btn-outline-dark',
+            ]"
+              @click="toggleTheme"
+          >
+            {{ isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode' }}
+          </button>
         </li>
         <li class="nav-item" v-if="!isLoggedIn">
           <RouterLink class="nav-link" to="/login">Login</RouterLink>
@@ -62,41 +67,13 @@ export default defineComponent({
   </nav>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
-
-// Simulating login state with a ref for demonstration
-const isLoggedIn = ref(false);
-
-// Function to log out (you can extend this with actual logout logic)
-const logout = () => {
-  isLoggedIn.value = false;
-};
-
-// Dark mode toggler logic (added inside setup)
-const isDarkMode = ref(false);
-
-const toggleTheme = () => {
-  isDarkMode.value = !isDarkMode.value;
-  if (isDarkMode.value) {
-    document.body.classList.add('bg-dark', 'text-light');
-    document.body.classList.remove('bg-light', 'text-dark');
-  } else {
-    document.body.classList.add('bg-light', 'text-dark');
-    document.body.classList.remove('bg-dark', 'text-light');
-  }
-};
-</script>
-
 <style scoped>
-/* Make navbar fixed at the top */
 .navbar {
   margin-bottom: 0;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000; /* Ensures navbar is above other content */
+  z-index: 1000;
   width: 100%;
 }
 
@@ -104,9 +81,15 @@ const toggleTheme = () => {
   margin-left: 20px;
 }
 
+.custom-dark-btn {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+
 @media (min-width: 1024px) {
   .navbar {
-    padding: 10px 20px; /* Adjust padding if necessary */
+    padding: 10px 20px;
   }
 }
 </style>
